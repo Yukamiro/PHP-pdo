@@ -6,6 +6,7 @@ var_dump($_GET);
 
 
 
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     var_dump("ok");
     $errors = [];
@@ -21,8 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if (empty($_POST["image"])) {
         $errors["image"] = "L'image est vide";
     }
+    if ($_POST["horsePower"] <= 0 and $_POST["horsePower"] >= 800) {
+        $vitesse["horsePower"] = "La vitesse dois être comprise entre 0 et 800";
+    }
 
-    if (empty($errors)) {
+    if (empty($errors) and empty($vitesse)) {
         $pdo = connectDB();
         $requete = $pdo->prepare("INSERT INTO car(model, brand, horsePower, image)
                         VALUES(:model, :brand, :horsePower, :image);");
@@ -33,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             "image" => $_POST["image"],
         ]);
     }
+    header("location: index.php");
 }
 ?>
 
@@ -60,9 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         echo ($errors["horsePower"]);
     } ?>
 
+    <?php if (isset($vitesse["horsePower"])) {
+        echo ($vitesse["horsePower"]);
+    } ?>
+
 
     <label for="image">image</label>
-    <input type="text" id="image" name="image">
+    <input type="file" id="image" name="image">
 
     <?php if (isset($errors["horsePower"])) {
         echo ($errors["horsePower"]);

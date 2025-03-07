@@ -4,14 +4,24 @@ require_once("connectDB.php");
 var_dump($_GET);
 var_dump($_POST);
 
+
+
+
 $pdo = connectDB();
 $requete2 = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
 $requete2->execute([
     ":id" => $_GET["id"]
 ]);
-
 $car = $requete2->fetch();
 var_dump($car);
+
+
+if (!isset($_GET["id"])) {
+    header("location: index.php");
+}
+if ($_GET["id"] == null || $_GET["id"] != $car["id"]) {
+    header("location: index.php");
+}
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
@@ -23,13 +33,18 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errors["brand"] = "Le brand est vide";
     }
     if (empty($_POST["horsePower"])) {
-        $errors["horsePower"] = "La vitesse est vide";
+        $vitesse["horsePower"] = "La vitesse est vide";
     }
+
+    if ($_POST["horsePower"] <= 0 and $_POST["horsePower"] >= 800) {
+        $errors["horsePower"] = "La vitesse dois être comprise entre 0 et 800";
+    }
+
     if (empty($_POST["image"])) {
         $errors["image"] = "L'image est vide";
     }
 
-    if (empty($errors)) {
+    if (empty($errors) and empty($vitesse)) {
 
         if (!isset($_GET["id"])) {
             header("location: index.php");
@@ -46,9 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     }
 }
 
-if (!isset($_GET["id"])) {
-    header("location: index.php");
-}
 
 ?>
 
@@ -74,6 +86,11 @@ if (!isset($_GET["id"])) {
     <?php if (isset($errors["horsePower"])) {
         echo ($errors["horsePower"]);
     } ?>
+
+    <?php if (isset($vitesse["horsePower"])) {
+        echo ($vitesse["horsePower"]);
+    } ?>
+
 
     <label for="image">image</label>
     <input type="file" id="image" name="image" value="<?php echo ($car["image"]) ?>">

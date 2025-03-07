@@ -12,6 +12,7 @@ $requete->execute();
 $cars = $requete->fetchAll();
 var_dump($cars);
 ?>
+<a href="login.php">Se connecter</a>
 <a href="add.php"> Ajouter une voiture</a>
 <?php
 
