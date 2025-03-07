@@ -13,7 +13,7 @@ $cars = $requete->fetchAll();
 var_dump($cars);
 ?>
 <a href="login.php">Se connecter</a>
-<a href="add.php"> Ajouter une voiture</a>
+
 <?php
 
 foreach ($cars as $car) {  ?>
@@ -23,8 +23,7 @@ foreach ($cars as $car) {  ?>
         <h2><?php echo ($car["model"]) ?></h2>
         <p><?php echo ($car["brand"]) ?></p>
         <p><?php echo ($car["horsePower"]) ?></p>
-        <a href="update.php?id=<?php echo ($car["id"]) ?>">Modifier</a>
-        <a href="delete.php?id=<?php echo ($car["id"]) ?>">Supprimer</a>
+
 
 
     </div>

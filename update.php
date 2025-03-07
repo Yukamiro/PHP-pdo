@@ -3,7 +3,10 @@ require_once("block/header.php");
 require_once("connectDB.php");
 var_dump($_GET);
 var_dump($_POST);
-
+session_start();
+if (!isset($_SESSION["username"])) {
+    header("Location: index.php");
+}
 
 
 
