@@ -4,7 +4,14 @@ require_once("connectDB.php");
 var_dump($_GET);
 var_dump($_POST);
 
+$pdo = connectDB();
+$requete2 = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
+$requete2->execute([
+    ":id" => $_GET["id"]
+]);
 
+$car = $requete2->fetch();
+var_dump($car);
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
@@ -21,15 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if (empty($_POST["image"])) {
         $errors["image"] = "L'image est vide";
     }
+
     if (empty($errors)) {
 
-        $pdo = connectDB();
-        $requete2 = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
-        $requete2->execute([
-            ":id" => 47
-        ]);
-        $car = $requete2->fetch();
-        var_dump($car);
+        if (!isset($_GET["id"])) {
+            header("location: index.php");
+        }
+
         $requete = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
         $requete->execute([
             ":model" => $_POST["model"],
@@ -47,31 +52,31 @@ if (!isset($_GET["id"])) {
 
 ?>
 
-<form method="POST" action="update.php?id=47">
+<form method="POST" action="update.php?id=<?php echo ($_GET["id"]) ?>">
 
     <label for="model"> modifier le model</label>
-    <input type="text" id="model" name="model">
+    <input type="text" id="model" name="model" value="<?php echo ($car["model"]) ?>">
 
     <?php if (isset($errors["model"])) {
         echo ($errors["model"]);
     } ?>
 
     <label for="brand">modifier le brand</label>
-    <input type="text" id="brand" name="brand">
+    <input type="text" id="brand" name="brand" value="<?php echo ($car["brand"]) ?>">
 
     <?php if (isset($errors["brand"])) {
         echo ($errors["brand"]);
     } ?>
 
     <label for="horsePower">modifier la je sais pas</label>
-    <input type="number" id="horsePower" name="horsePower">
+    <input type="number" id="horsePower" name="horsePower" value="<?php echo ($car["horsePower"]) ?>">
 
     <?php if (isset($errors["horsePower"])) {
         echo ($errors["horsePower"]);
     } ?>
 
     <label for="image">image</label>
-    <input type="text" id="image" name="image">
+    <input type="file" id="image" name="image" value="<?php echo ($car["image"]) ?>">
 
     <?php if (isset($errors["image"])) {
         echo ($errors["image"]);

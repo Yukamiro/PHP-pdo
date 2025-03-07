@@ -23,6 +23,7 @@ foreach ($cars as $car) {  ?>
         <p><?php echo ($car["brand"]) ?></p>
         <p><?php echo ($car["horsePower"]) ?></p>
         <a href="update.php?id=<?php echo ($car["id"]) ?>">Modifier</a>
+        <a href="delete.php?id=<?php echo ($car["id"]) ?>">Supprimer</a>
 
 
     </div>
