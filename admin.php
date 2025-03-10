@@ -26,10 +26,10 @@ var_dump($cars);
 foreach ($cars as $car) {  ?>
 
     <div class="dog">
-        <img src="img/<?php echo ($car["image"]) ?>" alt="Model de la voiture">
+        <img src="img/<?php echo ($car["image"]) ?>" style="width: 20%;" alt="Model de la voiture">
         <h2><?php echo ($car["model"]) ?></h2>
         <p><?php echo ($car["brand"]) ?></p>
-        <p><?php echo ($car["horsePower"]) ?></p>
+        <p><?php echo ($car["horsePower"]) ?> Chevaux</p>
         <a href="update.php?id=<?php echo ($car["id"]) ?>">Modifier</a>
         <a href="delete.php?id=<?php echo ($car["id"]) ?>">Supprimer</a>
 
@@ -39,5 +39,3 @@ foreach ($cars as $car) {  ?>
 <?php
 }
 ?>
-
-<a href="logout.php">Se déconnecter</a>

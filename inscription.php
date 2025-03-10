@@ -24,19 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     var_dump($mail);
 
+
     $requete3 = $pdo->prepare("SELECT * FROM user WHERE username = :username;");
     $requete3->execute([
         "username" => $_POST["username"]
     ]);
-
     $username = $requete3->fetch();
+    var_dump($username);
 
-    if (!isset($mail)) {
-        $copyMail["Email"] = "Le mail existe déja !";
+    if ($mail != false) {
+        $errors["Email"] = "Le mail existe déja !";
     }
 
-    if (!isset($username)) {
-        $copyUsername["username"] = "Le username existe déja !";
+    if ($username != false) {
+        $errors["username"] = "Le username existe déja !";
     }
 
 
@@ -48,19 +49,21 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if (empty($_POST["username"])) {
         $errors["username"] = "Le username est vide";
     }
-    if (empty($_POST["password"])) {
-        $errors["password"] = "Le mot de passe est vide";
-    }
 
     if (strlen($_POST["password"]) < 8) {
         $errors["password"] = "le mot de passe est trop court !";
     }
 
+    if (empty($_POST["password"])) {
+        $errors["password"] = "Le mot de passe est vide";
+    }
 
 
 
 
-    if (empty($errors) and empty($copyMail) and empty($copyUsername)) {
+
+
+    if (empty($errors)) {
 
         $pass = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
@@ -90,16 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         echo ($errors["Email"]);
     } ?>
 
-    <?php if (isset($copyMail["Email"])) {
-        echo ($copyMail["Email"]);
-    } ?>
-
     <label for="Username">Username</label>
     <input type="text" name="username">
-
-    <?php if (isset($copyUsername["username"])) {
-        echo ($copyUsername["username"]);
-    } ?>
 
     <?php if (isset($errors["username"])) {
         echo ($errors["username"]);

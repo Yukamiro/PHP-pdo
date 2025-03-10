@@ -76,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <label for="image">image</label>
     <input type="file" id="image" name="image">
 
-    <?php if (isset($errors["horsePower"])) {
-        echo ($errors["horsePower"]);
+    <?php if (isset($errors["image"])) {
+        echo ($errors["image"]);
     } ?>
 
 

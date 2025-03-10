@@ -50,7 +50,7 @@ if (isset($errors["user"])) {
     <input type="password" name="password">
 
     <button>Valider</button>
-
+    <button formaction="index.php">Annuler</button>
 
 </form>
 <a href="inscription.php">S'inscrire</a>

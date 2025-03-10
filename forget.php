@@ -40,3 +40,5 @@ Entrez votre adresse mail
     <button>Envoyer</button>
 
 </form>
+
+<a href="login.php">Connexion</a>
