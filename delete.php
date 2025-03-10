@@ -13,17 +13,17 @@ $car = $requete2->fetch();
 var_dump($car);
 
 if (!isset($_GET["id"])) {
-    header("location: index.php");
+    header("location: admin.php");
 }
 
 if ($_GET["id"] == null || $_GET["id"] != $car["id"]) {
-    header("location: index.php");
+    header("location: admin.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if (!isset($_GET["idd"])) {
-        header("location: index.php");
+        header("location: admin.php");
     }
 
 
@@ -36,5 +36,5 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <form method="POST" action="delete.php?id=<?php echo ($_GET["id"]) ?>">
     <button>Supprimer</button>
-    <button formaction="index.php">Annuler</button>
+    <button formaction="admin.php">Annuler</button>
 </form>

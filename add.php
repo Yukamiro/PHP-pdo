@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             "horsePower" => $_POST["horsePower"],
             "image" => $_POST["image"],
         ]);
+        header("location: admin.php");
     }
-    header("location: index.php");
 }
 ?>
 

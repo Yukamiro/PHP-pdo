@@ -47,7 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errors["image"] = "L'image est vide";
     }
 
+
     if (empty($errors) and empty($vitesse)) {
+        $valide;
 
         if (!isset($_GET["id"])) {
             header("location: index.php");
@@ -61,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             ":image" => $_POST["image"],
             ":id" => $car["id"]
         ]);
+        $valide = "valider !";
     }
 }
 
@@ -105,6 +108,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <label for="submit"></label>
     <input type="submit" value="confirmer">
 
+    <button formaction="admin.php">Annuler</button>
 
 
 </form>
+
+<?php
+
+if (isset($valide)) {
+    echo ($valide);
+}

@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     var_dump($user);
 
 
-    if (!isset($user) || empty($_POST["username"]) || empty($_POST["password"])) {
+    if ($user == false || empty($_POST["username"]) || empty($_POST["password"])) {
         $errors["user"] = "Le username ou le mot de passe est invalide";
     }
 
@@ -54,5 +54,6 @@ if (isset($errors["user"])) {
 
 </form>
 <a href="inscription.php">S'inscrire</a>
+<a href="forget.php">Mot de passe oublié</a>
 
 <!-- mdp de username 2 : $2y$10$7M09EwTgziusIZ.oeq2r6OJWpbp5OZuzDhPGdhyKkrrXyAJHm22v2 -->
