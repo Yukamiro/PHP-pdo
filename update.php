@@ -1,6 +1,7 @@
 <?php
 require_once("block/header.php");
 require_once("connectDB.php");
+
 var_dump($_GET);
 var_dump($_POST);
 session_start();
@@ -28,6 +29,8 @@ if ($_GET["id"] == null || $_GET["id"] != $car["id"]) {
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
+
+
     $errors = [];
     if (empty($_POST["model"])) {
         $errors["model"] = "Le model est vide";
@@ -43,34 +46,59 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errors["horsePower"] = "La vitesse dois être comprise entre 0 et 800";
     }
 
-    if (empty($_POST["image"])) {
-        $errors["image"] = "L'image est vide";
-    }
 
 
     if (empty($errors) and empty($vitesse)) {
-        $valide;
+
+
 
         if (!isset($_GET["id"])) {
             header("location: index.php");
         }
 
-        $requete = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
-        $requete->execute([
-            ":model" => $_POST["model"],
-            ":brand" => $_POST["brand"],
-            ":horsePower" => $_POST["horsePower"],
-            ":image" => $_POST["image"],
-            ":id" => $car["id"]
-        ]);
-        $valide = "valider !";
+        if (isset($_FILES["image"])) {
+            if ($_FILES['image']['error'] == 0) {
+
+
+                // Etape 2
+                if ($_FILES['image']['size'] <= 100000000) {
+                    //Etape 3
+
+                    $extensions_autorisees = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');
+                    $extension = $_FILES['image']['type'];
+                    if (in_array($extension, $extensions_autorisees)) {
+                        //Etape 4
+                        $image_url = uniqid() . $_FILES['image']['name'];
+                        move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image_url);
+
+                        unlink("img/" . $car["image"]);
+
+                        $requete = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
+                        $requete->execute([
+                            ":model" => $_POST["model"],
+                            ":brand" => $_POST["brand"],
+                            ":horsePower" => $_POST["horsePower"],
+                            ":image" => $image_url,
+                            ":id" => $car["id"]
+                        ]);
+
+
+                        echo "L'envoi a bien été effectué !";
+                    } else {
+                        echo ('J\'accepte que les jpg, jpeg, gif, png');
+                    }
+                } else {
+                    echo ('le fichier est trop lourd 1MB max');
+                }
+            }
+        }
     }
 }
 
 
 ?>
 
-<form method="POST" action="update.php?id=<?php echo ($_GET["id"]) ?>">
+<form method="POST" action="update.php?id=<?php echo ($_GET["id"]) ?>" enctype="multipart/form-data">
 
     <label for="model"> modifier le model</label>
     <input type="text" id="model" name="model" value="<?php echo ($car["model"]) ?>">
