@@ -1,7 +1,7 @@
 <?php
 require_once("block/header.php");
 require_once("connectDB.php");
-var_dump($_GET["id"]);
+
 
 $pdo = connectDB();
 $requete2 = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
@@ -10,7 +10,7 @@ $requete2->execute([
 ]);
 
 $car = $requete2->fetch();
-var_dump($car);
+
 
 if (!isset($_GET["id"])) {
     header("location: admin.php");
@@ -33,8 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     ]);
 }
 ?>
+<div>
+    <h2>
+        ON SUPPRIME CE TRUC LA ?
+    </h2>
+</div>
 
 <form method="POST" action="delete.php?id=<?php echo ($_GET["id"]) ?>">
-    <button>Supprimer</button>
-    <button formaction="admin.php">Annuler</button>
+
+    <p>
+        <button class="p-3 mb-2 bg-danger text-white">Supprimer</button>
+    </p>
+
+    <p>
+        <button formaction="admin.php" class="p-3 mb-2 bg-danger-subtle text-danger-emphasis">Annuler</button>
+    </p>
 </form>

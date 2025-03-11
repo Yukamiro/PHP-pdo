@@ -6,7 +6,7 @@ require_once("connectDB.php");
 $pdo = connectDB();
 
 
-var_dump($_POST);
+
 
 
 
@@ -86,29 +86,44 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <form method="POST" action="inscription.php">
 
-    <label for="Email">Email</label>
-    <input type="Email" name="Email">
+    <span class="d-block p-2 text-bg-dark">
 
-    <?php if (isset($errors["Email"])) {
-        echo ($errors["Email"]);
-    } ?>
+        <label for="Email">Email</label>
+        <input type="Email" name="Email">
 
-    <label for="Username">Username</label>
-    <input type="text" name="username">
+        <?php if (isset($errors["Email"])) {
+            echo ($errors["Email"]);
+        } ?>
 
-    <?php if (isset($errors["username"])) {
-        echo ($errors["username"]);
-    } ?>
+    </span>
 
-    <label for="password">Mot de passe</label>
-    <input type="password" name="password">
+    <span class="d-block p-2 text-bg-dark">
 
-    <?php if (isset($errors["password"])) {
-        echo ($errors["password"]);
-    } ?>
+        <label for="Username">Username</label>
+        <input type="text" name="username">
 
-    <button>Valider</button>
+        <?php if (isset($errors["username"])) {
+            echo ($errors["username"]);
+        } ?>
 
+    </span>
+
+    <span class="d-block p-2 text-bg-dark">
+
+        <label for="password">Mot de passe</label>
+        <input type="password" name="password">
+
+        <?php if (isset($errors["password"])) {
+            echo ($errors["password"]);
+        } ?>
+
+    </span>
+    <span class="d-block p-2 text-bg-dark">
+
+        <button>Valider</button>
+        <button formaction="index.php">Annuler</button>
+
+    </span>
 
 </form>
 

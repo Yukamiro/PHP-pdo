@@ -3,8 +3,7 @@ require_once("block/header.php");
 require_once("connectDB.php");
 
 
-var_dump($_GET);
-var_dump($_POST);
+
 
 session_start();
 if (!isset($_SESSION["username"])) {
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errors["horsePower"] .= ".La vitesse dois être comprise entre 0 et 800";
     }
 
-    var_dump($errors);
+
 
     if (empty($errors)) {
 
@@ -73,44 +72,57 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
 <form method="POST" action="add.php" enctype="multipart/form-data">
+    <div class="d-flex flex-column mb-3">
 
-    <label for="model">model</label>
-    <input type="text" id="model" name="model">
-    <?php if (isset($errors["model"])) {
-        echo ($errors["model"]);
-    } ?>
+        <div class="p-2">
 
+            <label for="model">model</label>
+            <input type="text" id="model" name="model">
+            <?php if (isset($errors["model"])) {
+                echo ($errors["model"]);
+            } ?>
 
-    <label for="brand">brand</label>
-    <input type="text" id="brand" name="brand">
+        </div>
 
-    <?php if (isset($errors["brand"])) {
-        echo ($errors["brand"]);
-    } ?>
+        <div class="p-2">
 
-    <label for="horsePower">horsePower</label>
-    <input type="number" id="horsePower" name="horsePower">
+            <label for="brand">brand</label>
+            <input type="text" id="brand" name="brand">
 
-    <?php if (isset($errors["horsePower"])) {
-        echo ($errors["horsePower"]);
-    } ?>
+            <?php if (isset($errors["brand"])) {
+                echo ($errors["brand"]);
+            } ?>
 
-    <?php if (isset($vitesse["horsePower"])) {
-        echo ($vitesse["horsePower"]);
-    } ?>
+        </div>
 
+        <div class="p-2">
 
-    <label for="image">image</label>
-    <input type="file" id="image" name="image" value="5000000000">
+            <label for="horsePower">horsePower</label>
+            <input type="number" id="horsePower" name="horsePower">
 
-    <?php if (isset($errors["image"])) {
-        echo ($errors["image"]);
-    } ?>
+            <?php if (isset($errors["horsePower"])) {
+                echo ($errors["horsePower"]);
+            } ?>
 
+        </div>
 
-    <label for="submit"></label>
-    <input type="submit" value="Valider">
+        <div class="p-2">
 
+            <label for="image">image</label>
+            <input type="file" id="image" name="image" value="5000000000">
 
+            <?php if (isset($errors["image"])) {
+                echo ($errors["image"]);
+            } ?>
+
+        </div>
+
+        <div class="p-2">
+
+            <button>Confirmer</button>
+            <button formaction="admin.php">Annuler</button>
+
+        </div>
+    </div>
 
 </form>

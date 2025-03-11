@@ -1,8 +1,7 @@
 <?php
 require_once("block/header.php");
 require_once("connectDB.php");
-var_dump($_POST);
-var_dump($_GET);
+
 $pdo = connectDB();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -19,26 +18,29 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         ]);
 
         $email = $requete->fetch();
-
-        var_dump($email);
     }
 }
 
 ?>
+<div class="container text-center">
+    <div class="row align-items-start">
+        <div class="col" style="padding-top: 20%;">
+            Entrez votre adresse mail
 
-Entrez votre adresse mail
+            <form method="POST" action="forget.php">
 
-<form method="POST" action="forget.php">
+                <label for="Email">Email</label>
+                <input type="Email" name="Email">
 
-    <label for="Email">Email</label>
-    <input type="Email" name="Email">
+                <?php if (isset($errors["Email"])) {
+                    echo ($errors["Email"]);
+                } ?>
 
-    <?php if (isset($errors["Email"])) {
-        echo ($errors["Email"]);
-    } ?>
+                <button>Envoyer</button>
 
-    <button>Envoyer</button>
+            </form>
 
-</form>
-
-<a href="login.php">Connexion</a>
+            <a href="login.php">Connexion</a>
+        </div>
+    </div>
+</div>
