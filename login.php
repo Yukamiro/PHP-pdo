@@ -4,8 +4,7 @@ require_once("connectDB.php");
 
 $pdo = connectDB();
 $pass = password_hash("admin", PASSWORD_DEFAULT);
-var_dump($pass);
-var_dump($_POST);
+
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $errors = [];
@@ -16,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     ]);
     $user = $requete->fetch();
 
-    var_dump($user);
+
 
 
     if ($user == false || empty($_POST["username"]) || empty($_POST["password"])) {
@@ -38,22 +37,36 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 }
 
 if (isset($errors["user"])) {
+?>
+    <p class="text-danger">
+    <?php
     echo ($errors["user"]);
 } ?>
+    </p>
 
-<form method="POST" action="login.php">
+    <form method="POST" action="login.php">
+        <span class="d-block p-2 text-bg-dark">
 
-    <label>Username</label>
-    <input type="text" name="username">
+            <label>Username</label>
+            <input type="text" name="username">
+        </span>
+        <span class="d-block p-2 text-bg-dark">
 
-    <label>Mot de passe</label>
-    <input type="password" name="password">
+            <label>Mot de passe</label>
+            <input type="password" name="password">
+        </span>
 
-    <button>Valider</button>
-    <button formaction="index.php">Annuler</button>
+        <span class="d-block p-2 text-bg-dark">
 
-</form>
-<a href="inscription.php">S'inscrire</a>
-<a href="forget.php">Mot de passe oublié</a>
+            <button>Valider</button>
+            <button formaction="index.php">Annuler</button>
+        </span>
 
-<!-- mdp de username 2 : $2y$10$7M09EwTgziusIZ.oeq2r6OJWpbp5OZuzDhPGdhyKkrrXyAJHm22v2 -->
+    </form>
+    <div style="padding-left: 3em;">
+
+        <a href="inscription.php">S'inscrire</a>
+        <a href="forget.php" style="padding-left: 1em;">Mot de passe oublié</a>
+    </div>
+
+    <!-- mdp de username 2 : $2y$10$7M09EwTgziusIZ.oeq2r6OJWpbp5OZuzDhPGdhyKkrrXyAJHm22v2 -->

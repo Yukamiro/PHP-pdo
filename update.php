@@ -2,8 +2,7 @@
 require_once("block/header.php");
 require_once("connectDB.php");
 
-var_dump($_GET);
-var_dump($_POST);
+
 session_start();
 if (!isset($_SESSION["username"])) {
     header("Location: index.php");
@@ -17,7 +16,7 @@ $requete2->execute([
     ":id" => $_GET["id"]
 ]);
 $car = $requete2->fetch();
-var_dump($car);
+
 
 
 if (!isset($_GET["id"])) {
@@ -39,16 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errors["brand"] = "Le brand est vide";
     }
     if (empty($_POST["horsePower"])) {
-        $vitesse["horsePower"] = "La vitesse est vide";
+        $errors["horsePower"] .= "La vitesse est vide";
     }
 
     if ($_POST["horsePower"] <= 0 and $_POST["horsePower"] >= 800) {
-        $errors["horsePower"] = "La vitesse dois être comprise entre 0 et 800";
+        $errors["horsePower"] .= "La vitesse dois être comprise entre 0 et 800";
     }
 
 
 
-    if (empty($errors) and empty($vitesse)) {
+    if (empty($errors)) {
 
 
 
@@ -99,45 +98,57 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 ?>
 
 <form method="POST" action="update.php?id=<?php echo ($_GET["id"]) ?>" enctype="multipart/form-data">
+    <div class="d-flex flex-column mb-3">
+        <div class="p-2">
 
-    <label for="model"> modifier le model</label>
-    <input type="text" id="model" name="model" value="<?php echo ($car["model"]) ?>">
+            <label for="model"> modifier le model</label>
+            <input type="text" id="model" name="model" value="<?php echo ($car["model"]) ?>">
 
-    <?php if (isset($errors["model"])) {
-        echo ($errors["model"]);
-    } ?>
+            <?php if (isset($errors["model"])) {
+                echo ($errors["model"]);
+            } ?>
 
-    <label for="brand">modifier le brand</label>
-    <input type="text" id="brand" name="brand" value="<?php echo ($car["brand"]) ?>">
+        </div>
+        <div class="p-2">
+            <label for="brand">modifier le brand</label>
+            <input type="text" id="brand" name="brand" value="<?php echo ($car["brand"]) ?>">
 
-    <?php if (isset($errors["brand"])) {
-        echo ($errors["brand"]);
-    } ?>
+            <?php if (isset($errors["brand"])) {
+                echo ($errors["brand"]);
+            } ?>
+        </div>
 
-    <label for="horsePower">modifier la je sais pas</label>
-    <input type="number" id="horsePower" name="horsePower" value="<?php echo ($car["horsePower"]) ?>">
+        <div class="p-2">
 
-    <?php if (isset($errors["horsePower"])) {
-        echo ($errors["horsePower"]);
-    } ?>
+            <label for="horsePower">modifie la VITESSE MON GROS</label>
+            <input type="number" id="horsePower" name="horsePower" value="<?php echo ($car["horsePower"]) ?>">
 
-    <?php if (isset($vitesse["horsePower"])) {
-        echo ($vitesse["horsePower"]);
-    } ?>
+            <?php if (isset($errors["horsePower"])) {
+                echo ($errors["horsePower"]);
+            } ?>
 
 
-    <label for="image">image</label>
-    <input type="file" id="image" name="image" value="<?php echo ($car["image"]) ?>">
+        </div>
 
-    <?php if (isset($errors["image"])) {
-        echo ($errors["image"]);
-    } ?>
+        <div class="p-2">
 
-    <label for="submit"></label>
-    <input type="submit" value="confirmer">
+            <label for="image">image</label>
+            <input type="file" id="image" name="image" value="<?php echo ($car["image"]) ?>">
 
-    <button formaction="admin.php">Annuler</button>
+            <?php if (isset($errors["image"])) {
+                echo ($errors["image"]);
+            } ?>
 
+        </div>
+
+        <div class="p-2">
+
+            <button type="button" class="btn btn-success">Confirmer</button>
+
+            <button formaction="admin.php" class="btn btn-danger">Annuler</button>
+
+        </div>
+    </div>
 
 </form>
 
