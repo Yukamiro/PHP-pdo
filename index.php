@@ -10,20 +10,20 @@ $requete = $pdo->prepare("SELECT * FROM car;");
 $requete->execute();
 $cars = $requete->fetchAll();
 
-?>
-<div class="container text-center" style="padding: 2em;">
-    <div class="row align-items-start">
+?><div class="p-3 mb-2 bg-dark-subtle text-dark-emphasis">
+    <div class="container text-center" style="padding: 2em;">
+        <div class="row align-items-start">
 
-        <div class="col">
+            <div class="col">
 
-            <a href="login.php" class="btn btn-success">Se connecter</a>
+                <a href="login.php" class="btn btn-success">Se connecter</a>
+
+            </div>
 
         </div>
-
     </div>
+
 </div>
-
-
 
 
 <div class="container text-center">

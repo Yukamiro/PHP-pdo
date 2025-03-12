@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
                 // Etape 2
-                if ($_FILES['image']['size'] <= 100000000) {
+                if ($_FILES['image']['size'] <= 1000000) {
                     //Etape 3
 
                     $extensions_autorisees = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');

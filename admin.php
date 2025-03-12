@@ -18,21 +18,21 @@ $requete->execute();
 $cars = $requete->fetchAll();
 
 ?>
+<div class="p-3 mb-2 bg-dark-subtle text-dark-emphasis">
+    <div class="container text-center" style="padding: 2em;">
+        <div class="row align-items-start">
 
-<div class="container text-center" style="padding: 2em;">
-    <div class="row align-items-start">
+            <div class="col">
+                <a href="logout.php" class="text-danger" class="navbar-brand">Se deconnecter</a>
+            </div>
 
-        <div class="col">
-            <a href="logout.php" class="text-danger" class="navbar-brand">Se deconnecter</a>
+            <div class="col">
+                <a href="add.php" class="text-success" class="navbar-brand"> Ajouter une voiture</a>
+            </div>
+
         </div>
-
-        <div class="col">
-            <a href="add.php" class="text-success" class="navbar-brand"> Ajouter une voiture</a>
-        </div>
-
     </div>
 </div>
-
 
 <div class="container text-center">
     <div class="d-flex justify-content-evenly" style="padding-top: 1em;">

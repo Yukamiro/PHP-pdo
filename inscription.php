@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $mail = $requete2->fetch();
 
-    var_dump($mail);
+
 
 
     $requete3 = $pdo->prepare("SELECT * FROM user WHERE username = :username;");
@@ -30,15 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         "username" => $_POST["username"]
     ]);
     $username = $requete3->fetch();
-    var_dump($username);
-
-    if ($mail != false) {
-        $errors["Email"] = "Le mail existe déja !";
-    }
-
-    if ($username != false) {
-        $errors["username"] = "Le username existe déja !";
-    }
 
 
     if (empty($_POST["Email"])) {
@@ -50,6 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errors["username"] = "Le username est vide";
     }
 
+    if ($mail != false) {
+        $errors["Email"] = " Le mail existe déja !";
+    }
+
+    if ($username != false) {
+        $errors["username"] = "Le username existe déja !";
+    }
+
+
+
     if (strlen($_POST["password"]) < 8) {
         $errors["password"] = "le mot de passe est trop court !";
     }
@@ -60,7 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
 
-
+    if (!filter_var($_POST["Email"], FILTER_VALIDATE_EMAIL)) {
+        $errors["Email"] = " Le mail est invalide";
+    }
 
 
     if (empty($errors)) {
@@ -78,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         session_start();
         $_SESSION["username"] = $_POST["username"];
-        header("Location: admin.php");
+        // header("Location: admin.php");
     }
 }
 
