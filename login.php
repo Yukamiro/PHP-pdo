@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $_SESSION["username"] = $user["username"];
             header("Location: admin.php");
         } else {
-            var_dump("pas ok");
+            $errors["password"] = "Le username ou le mot de passe est invalide";
         }
     }
 }
