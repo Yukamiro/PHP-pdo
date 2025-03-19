@@ -1,66 +1,51 @@
 <?php
 require_once("block/header.php");
-require_once("connectDB.php");
-
+require_once("CarManager.php");
 
 session_start();
+
 if (!isset($_SESSION["username"])) {
     header("Location: index.php");
 }
 
 
+$CarManager = new CarManager();
 
-$pdo = connectDB();
-$requete2 = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
-$requete2->execute([
-    ":id" => $_GET["id"]
-]);
-$car = $requete2->fetch();
+$cars = $CarManager->selectCarByID($_GET["id"]);
 
-
+var_dump($cars);
 
 if (!isset($_GET["id"])) {
     header("location: index.php");
 }
-if ($_GET["id"] == null || $_GET["id"] != $car["id"]) {
+if ($_GET["id"] == null || $_GET["id"] != $cars->getId()) {
     header("location: index.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
-
     $errors = [];
-    if (empty($_POST["model"])) {
-        $errors["model"] = "Le model est vide";
-    }
-    if (empty($_POST["brand"])) {
-        $errors["brand"] = "Le brand est vide";
-    }
-    if (empty($_POST["horsePower"])) {
-        $errors["horsePower"] .= "La vitesse est vide";
-    }
 
-    if ($_POST["horsePower"] <= 0 and $_POST["horsePower"] >= 800) {
-        $errors["horsePower"] .= "La vitesse dois être comprise entre 0 et 800";
-    }
+    $errors = $CarManager->verifyError($errors, $_POST);
 
 
 
     if (empty($errors)) {
 
-
+        var_dump($errors);
 
         if (!isset($_GET["id"])) {
             header("location: index.php");
         }
+
 
         if (isset($_FILES["image"])) {
             if ($_FILES['image']['error'] == 0) {
 
 
                 // Etape 2
-                if ($_FILES['image']['size'] <= 1000000) {
+                if ($_FILES['image']['size'] <= 100000000) {
                     //Etape 3
 
                     $extensions_autorisees = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');
@@ -70,17 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         $image_url = uniqid() . $_FILES['image']['name'];
                         move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image_url);
 
-                        unlink("img/" . $car["image"]);
 
-                        $requete = $pdo->prepare("UPDATE car SET model = :model, brand = :brand, horsePower = :horsePower, image = :image WHERE id = :id;");
-                        $requete->execute([
-                            ":model" => $_POST["model"],
-                            ":brand" => $_POST["brand"],
-                            ":horsePower" => $_POST["horsePower"],
-                            ":image" => $image_url,
-                            ":id" => $car["id"]
-                        ]);
+                        unlink("img/" . $cars->getImage());
 
+
+
+                        $cars->setModel($_POST["model"]);
+                        $cars->setBrand($_POST["brand"]);
+                        $cars->setHorsePower($_POST["horsePower"]);
+                        $cars->setImage($image_url);
+
+                        $CarManager->updateCarByID($cars);
 
                         echo "L'envoi a bien été effectué !";
                     } else {
@@ -89,6 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 } else {
                     echo ('le fichier est trop lourd 1MB max');
                 }
+            } else {
+                echo ("L'image est vide");
             }
         }
     }
@@ -102,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <div class="p-2">
 
             <label for="model"> modifier le model</label>
-            <input type="text" id="model" name="model" value="<?php echo ($car["model"]) ?>">
+            <input type="text" id="model" name="model" value="<?php echo ($cars->getModel()) ?>">
 
             <?php if (isset($errors["model"])) {
                 echo ($errors["model"]);
@@ -111,8 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         </div>
         <div class="p-2">
             <label for="brand">modifier le brand</label>
-            <input type="text" id="brand" name="brand" value="<?php echo ($car["brand"]) ?>">
-
+            <input type="text" id="brand" name="brand" value="<?php echo ($cars->getBrand()) ?>">
             <?php if (isset($errors["brand"])) {
                 echo ($errors["brand"]);
             } ?>
@@ -121,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <div class="p-2">
 
             <label for="horsePower">modifie la VITESSE MON GROS</label>
-            <input type="number" id="horsePower" name="horsePower" value="<?php echo ($car["horsePower"]) ?>">
+            <input type="number" id="horsePower" name="horsePower" value="<?php echo ($cars->getHorsePower()) ?>">
 
             <?php if (isset($errors["horsePower"])) {
                 echo ($errors["horsePower"]);
@@ -133,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <div class="p-2">
 
             <label for="image">image</label>
-            <input type="file" id="image" name="image" value="<?php echo ($car["image"]) ?>">
+            <input type="file" id="image" name="image" value="<?php echo ($cars->getImage()) ?>">
 
             <?php if (isset($errors["image"])) {
                 echo ($errors["image"]);
@@ -144,6 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <div class="p-2">
 
             <button type="button" class="btn btn-success">Confirmer</button>
+            <input type="submit" value="Envoyer">
+
 
             <button formaction="admin.php" class="btn btn-danger">Annuler</button>
 
@@ -151,9 +139,3 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     </div>
 
 </form>
-
-<?php
-
-if (isset($valide)) {
-    echo ($valide);
-}

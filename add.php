@@ -1,6 +1,6 @@
 <?php
 require_once("block/header.php");
-require_once("connectDB.php");
+require_once("CarManager.php");
 
 
 
@@ -13,24 +13,14 @@ if (!isset($_SESSION["username"])) {
 
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
+
     $errors = [];
-    if (empty($_POST["model"])) {
-        $errors["model"] = "Le model est vide";
-    }
-    if (empty($_POST["brand"])) {
-        $errors["brand"] = "Le brand est vide";
-    }
-    if (empty($_POST["horsePower"])) {
-        $errors["horsePower"] .= "La vitesse est vide";
-    }
-    if (empty($_FILES["image"])) {
-        $errors["image"] = "L'image est vide";
-    }
-    if ($_POST["horsePower"] <= 0 and $_POST["horsePower"] >= 800) {
-        $errors["horsePower"] .= ".La vitesse dois être comprise entre 0 et 800";
-    }
 
+    $CarManager = new CarManager();
 
+    $errors = $CarManager->verifyError($errors, $_POST);
+
+    var_dump($errors);
 
     if (empty($errors)) {
 
@@ -48,15 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     $image_url = uniqid() . $_FILES['image']['name'];
                     move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image_url);
 
-                    $pdo = connectDB();
-                    $requete = $pdo->prepare("INSERT INTO car(model, brand, horsePower, image)
-                                    VALUES(:model, :brand, :horsePower, :image);");
-                    $requete->execute([
-                        "model" => $_POST["model"],
-                        "brand" => $_POST["brand"],
-                        "horsePower" => $_POST["horsePower"],
-                        "image" => $image_url,
-                    ]);
+                    $car = new Car(null, $_POST["brand"], $_POST["model"], $_POST["horsePower"], $image_url);
+
+                    $CarManager->insertCar($car);
+
+
+
 
                     echo "L'envoi a bien été effectué !";
                 } else {
@@ -65,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             } else {
                 echo ('le fichier est trop lourd 1MB max');
             }
+        } else {
+            echo ("L'image est vide");
         }
     }
 }
@@ -109,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <div class="p-2">
 
             <label for="image">image</label>
-            <input type="file" id="image" name="image" value="5000000000">
+            <input type="file" id="image" name="image">
 
             <?php if (isset($errors["image"])) {
                 echo ($errors["image"]);
@@ -117,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         </div>
 
-        <div class="p-2">
+        <div class=" p-2">
 
             <button>Confirmer</button>
             <button formaction="admin.php">Annuler</button>

@@ -1,23 +1,20 @@
 <?php
 require_once("block/header.php");
-require_once("connectDB.php");
+require_once("UserManager.php");
 
-$pdo = connectDB();
+
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    if (empty($_POST["Email"])) {
-        $errors["Email"] = "L'email est vide";
+    if (empty($_POST["email"])) {
+        $errors["email"] = "L'email est vide";
     }
 
     if (empty($errors)) {
 
-        $requete = $pdo->prepare("SELECT * FROM user WHERE Email = :Email;");
-        $requete->execute([
-            "Email" => $_POST["Email"]
-        ]);
+        $userManager = new UserManager();
 
-        $email = $requete->fetch();
+        $userManager->selectUserByEmail($_POST["email"]);
     }
 }
 
@@ -29,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             <form method="POST" action="forget.php">
 
-                <label for="Email">Email</label>
-                <input type="Email" name="Email">
+                <label for="email">Email</label>
+                <input type="email" name="email">
 
-                <?php if (isset($errors["Email"])) {
-                    echo ($errors["Email"]);
+                <?php if (isset($errors["email"])) {
+                    echo ($errors["email"]);
                 } ?>
 
                 <button>Envoyer</button>

@@ -1,19 +1,16 @@
 <?php
 require_once("block/header.php");
-require_once("connectDB.php");
+require_once("UserManager.php");
 
-$pdo = connectDB();
 $pass = password_hash("admin", PASSWORD_DEFAULT);
 
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $errors = [];
     // vérifier si POST["username"] existe
-    $requete = $pdo->prepare("SELECT * FROM user WHERE username = :username;");
-    $requete->execute([
-        "username" => $_POST["username"],
-    ]);
-    $user = $requete->fetch();
+    $userManager = new UserManager();
+
+    $user = $userManager->selectUserByUsername($_POST["username"]);
 
 
 
@@ -22,13 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errors["user"] = "Le username ou le mot de passe est invalide";
     }
 
-
-
     if (empty($errors)) {
 
-        if (password_verify($_POST["password"], $user["password"])) {
+        if (password_verify($_POST["password"], $user->getPassWord())) {
             session_start();
-            $_SESSION["username"] = $user["username"];
+            $_SESSION["username"] = $user->getUsername();
             header("Location: admin.php");
         } else {
             echo ("Le username ou le mot de passe est invalide");

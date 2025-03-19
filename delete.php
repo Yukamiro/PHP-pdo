@@ -1,36 +1,29 @@
 <?php
 require_once("block/header.php");
-require_once("connectDB.php");
+require_once("CarManager.php");
 
 
-$pdo = connectDB();
-$requete2 = $pdo->prepare("SELECT * FROM car WHERE id = :id;");
-$requete2->execute([
-    ":id" => $_GET["id"]
-]);
-
-$car = $requete2->fetch();
 
 
-if (!isset($_GET["id"])) {
-    header("location: admin.php");
-}
-
-if ($_GET["id"] == null || $_GET["id"] != $car["id"]) {
-    header("location: admin.php");
-}
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    if (!isset($_GET["idd"])) {
+
+    $carManager = new CarManager();
+    $car = $carManager->selectCarByID($_GET["id"]);
+
+
+    if (!isset($_GET["id"])) {
         header("location: admin.php");
     }
 
+    if ($_GET["id"] == null || $_GET["id"] != $car->getId()) {
+        header("location: admin.php");
+    }
 
-    $requete = $pdo->prepare("DELETE FROM car WHERE id = :id;");
-    $requete->execute([
-        "id" => $_GET["id"]
-    ]);
+    $carManager->deleteCarByID($_GET["id"]);
+    header("location: admin.php");
+    exit();
 }
 ?>
 <div>

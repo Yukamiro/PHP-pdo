@@ -1,6 +1,8 @@
 <?php
 require_once("block/header.php");
-require_once("connectDB.php");
+require_once("CarManager.php");
+
+
 session_start();
 
 
@@ -10,12 +12,10 @@ if (!isset($_SESSION["username"])) {
 
 
 
-$pdo = connectDB();
 
+$CarManager = new CarManager();
 
-$requete = $pdo->prepare("SELECT * FROM car;");
-$requete->execute();
-$cars = $requete->fetchAll();
+$cars = $CarManager->selectAllCars();
 
 ?>
 <div class="p-3 mb-2 bg-dark-subtle text-dark-emphasis">
@@ -39,12 +39,12 @@ $cars = $requete->fetchAll();
         <?php
         foreach ($cars as $car) {  ?>
             <div class="col">
-                <img src="img/<?php echo ($car["image"]) ?>" style="width: 50%;" alt="Model de la voiture">
-                <h2><?php echo ($car["model"]) ?></h2>
-                <p><?php echo ($car["brand"]) ?></p>
-                <p><?php echo ($car["horsePower"]) ?> Chevaux</p>
-                <a href="update.php?id=<?php echo ($car["id"]) ?>">Modifier</a>
-                <a href="delete.php?id=<?php echo ($car["id"]) ?>" class="text-danger">Supprimer</a>
+                <img src="img/<?php echo ($car->getImage()) ?>" style="width: 50%;" alt="Model de la voiture">
+                <h2><?php echo ($car->getModel()) ?></h2>
+                <p><?php echo ($car->getBrand()) ?></p>
+                <p><?php echo ($car->getHorsePower()) ?> Chevaux</p>
+                <a href="update.php?id=<?php echo ($car->getId()) ?>">Modifier</a>
+                <a href="delete.php?id=<?php echo ($car->getId()) ?>" class="text-danger">Supprimer</a>
             </div>
 
 
